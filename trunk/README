@@ -1,7 +1,7 @@
 Please refer to the project page for more information:
 http://code.google.com/p/picview-for-android/
 
-To get started, check out the code using Eclipse. In the future, ant scripts might be added to make
+To get started, check out the project at trunk/picview using Eclipse. In the future, ant scripts might be added to make
 building possible via the command line.
 
 To install Eclipse and the SDKs and plugins necessary, follow these instructions:
