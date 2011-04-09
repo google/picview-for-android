@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#000"
+    >
+<TextView android:id="@+id/logo"
+          android:textColor="#fff"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="10dip"
+          android:layout_weight="0"
+          android:textSize="30dp"
+          android:layout_gravity="center_vertical|center_horizontal" android:text="PicView"/>
+<EditText android:id="@+id/txtUsername"
+          android:scrollHorizontally="true"
+          android:layout_width="wrap_content"
+          android:lines="1"
+          android:text="saschah"
+          android:layout_weight="1"
+          android:layout_gravity="center_horizontal"
+          android:textSize="15dp"
+          android:layout_height="40dp"
+          android:inputType="textEmailAddress" />
+<Button android:text="OK"
+        android:id="@+id/topBarOkButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_weight="0"
+        android:layout_gravity="center_vertical|center_horizontal" />
+</LinearLayout>

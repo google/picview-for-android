@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android" android:title="PicView Preferences" android:orderingFromXml="true">
+<CheckBoxPreference android:title="3G data" android:summary="When disabled, data is only fetched via WiFi." android:defaultValue="false" android:key="threeGLoading"></CheckBoxPreference><EditTextPreference android:dialogTitle="Cache Size (MB)" android:key="cacheSize" android:title="Cache Size" android:summary="Set the maximum size for the cache." android:numeric="integer" android:dialogMessage="Recommended are at least 200MB" android:defaultValue="400"></EditTextPreference>
+
+<PreferenceCategory android:title="Foo Bar Category"><Preference android:title="FooBar" android:key="foobar"></Preference></PreferenceCategory>
+
+</PreferenceScreen>

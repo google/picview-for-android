@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:background="#444">
+<include android:id="@+id/include01" layout="@layout/topbar" android:layout_width="fill_parent" android:layout_height="wrap_content"></include>
+<ListView android:id="@+id/albumlist" android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="#f00" android:layout_weight="1"></ListView>
+</LinearLayout>
