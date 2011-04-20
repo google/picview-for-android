@@ -22,16 +22,16 @@ package com.google.android.apps.picview.request;
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public class PicasaAlbumsUrl implements UrlProvider {
-	private static final String BASE_URL = "http://picasaweb.google.com/data/feed/api/user/";
+  private static final String BASE_URL = "http://picasaweb.google.com/data/feed/api/user/";
 
-	private String user;
+  private String user;
 
-	public PicasaAlbumsUrl(String user) {
-		this.user = user;
-	}
+  public PicasaAlbumsUrl(String user) {
+    this.user = user;
+  }
 
-	@Override
-	public String getUrl() {
-		return BASE_URL + user;
-	}
+  @Override
+  public String getUrl() {
+    return BASE_URL + user;
+  }
 }

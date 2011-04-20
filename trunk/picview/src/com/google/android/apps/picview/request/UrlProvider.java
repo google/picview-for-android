@@ -22,8 +22,8 @@ package com.google.android.apps.picview.request;
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public interface UrlProvider {
-	/**
-	 * Returns the URL.
-	 */
-	public String getUrl();
+  /**
+   * Returns the URL.
+   */
+  public String getUrl();
 }

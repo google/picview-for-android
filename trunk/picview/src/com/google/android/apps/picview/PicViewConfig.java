@@ -23,11 +23,11 @@ package com.google.android.apps.picview;
  */
 public class PicViewConfig {
 
-	/**
-	 * The size of the album thumbnails in DP.
-	 */
-	public static int ALBUM_THUMBNAIL_SIZE = 140;
+  /**
+   * The size of the album thumbnails in DP.
+   */
+  public static int ALBUM_THUMBNAIL_SIZE = 140;
 
-	private PicViewConfig() {
-	}
+  private PicViewConfig() {
+  }
 }

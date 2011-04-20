@@ -25,46 +25,44 @@ import android.database.Cursor;
  */
 public class WebResponseCursor {
 
-	/**
-	 * A response and its modified timestamp.
-	 */
-	public static class CachedWebResponse {
-		public final String modified;
-		public final String response;
+  /**
+   * A response and its modified timestamp.
+   */
+  public static class CachedWebResponse {
+    public final String modified;
+    public final String response;
 
-		public CachedWebResponse(String modified, String response) {
-			this.modified = modified;
-			this.response = response;
-		}
-	}
+    public CachedWebResponse(String modified, String response) {
+      this.modified = modified;
+      this.response = response;
+    }
+  }
 
-	private final Cursor cursor;
-	private final String columnModified;
-	private final String columnResponse;
+  private final Cursor cursor;
+  private final String columnModified;
+  private final String columnResponse;
 
-	public WebResponseCursor(Cursor cursor, String columnModified,
-			String columnResponse) {
-		this.cursor = cursor;
-		this.columnModified = columnModified;
-		this.columnResponse = columnResponse;
-	}
+  public WebResponseCursor(Cursor cursor, String columnModified,
+      String columnResponse) {
+    this.cursor = cursor;
+    this.columnModified = columnModified;
+    this.columnResponse = columnResponse;
+  }
 
-	public boolean moveToFirst() {
-		return cursor != null && cursor.moveToFirst();
-	}
+  public boolean moveToFirst() {
+    return cursor != null && cursor.moveToFirst();
+  }
 
-	public void close() {
-		if (cursor != null) {
-			cursor.close();
-		}
-	}
+  public void close() {
+    if (cursor != null) {
+      cursor.close();
+    }
+  }
 
-	public CachedWebResponse getResponseAndClose() {
-		String modified = cursor.getString(cursor
-				.getColumnIndex(columnModified));
-		String response = cursor.getString(cursor
-				.getColumnIndex(columnResponse));
-		close();
-		return new CachedWebResponse(modified, response);
-	}
+  public CachedWebResponse getResponseAndClose() {
+    String modified = cursor.getString(cursor.getColumnIndex(columnModified));
+    String response = cursor.getString(cursor.getColumnIndex(columnResponse));
+    close();
+    return new CachedWebResponse(modified, response);
+  }
 }

@@ -30,7 +30,6 @@ import org.xml.sax.SAXException;
 
 import com.google.android.apps.picview.data.parser.PicasaAlbumsSaxHandler;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -42,94 +41,94 @@ import android.util.Xml;
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public class Album implements Serializable, Parcelable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final Parcelable.Creator<Photo> CREATOR = new Parcelable.Creator<Photo>() {
-		public Photo createFromParcel(Parcel in) {
-			try {
-				ObjectInputStream inputStream = new ObjectInputStream(
-						new ByteArrayInputStream(in.createByteArray()));
-				return (Photo) inputStream.readObject();
-			} catch (StreamCorruptedException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
+  public static final Parcelable.Creator<Photo> CREATOR = new Parcelable.Creator<Photo>() {
+    public Photo createFromParcel(Parcel in) {
+      try {
+        ObjectInputStream inputStream = new ObjectInputStream(
+            new ByteArrayInputStream(in.createByteArray()));
+        return (Photo) inputStream.readObject();
+      } catch (StreamCorruptedException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
 
-		public Photo[] newArray(int size) {
-			return new Photo[size];
-		}
-	};
+    public Photo[] newArray(int size) {
+      return new Photo[size];
+    }
+  };
 
-	private static final String TAG = "Album";
-	private String name;
-	private String thumbnailUrl;
-	private String gdataUrl;
+  private static final String TAG = "Album";
+  private String name;
+  private String thumbnailUrl;
+  private String gdataUrl;
 
-	/**
-	 * Parses picasa albums XML and returns a list of albums.
-	 */
-	public static List<Album> parseFromPicasaXml(String xmlStr) {
-		PicasaAlbumsSaxHandler handler = new PicasaAlbumsSaxHandler();
-		try {
-			Xml.parse(xmlStr, handler);
-			return handler.getAlbums();
-		} catch (SAXException e) {
-			Log.e(TAG, e.getMessage(), e);
-		}
-		return new ArrayList<Album>();
-	}
+  /**
+   * Parses Picasa albums XML and returns a list of albums.
+   */
+  public static List<Album> parseFromPicasaXml(String xmlStr) {
+    PicasaAlbumsSaxHandler handler = new PicasaAlbumsSaxHandler();
+    try {
+      Xml.parse(xmlStr, handler);
+      return handler.getAlbums();
+    } catch (SAXException e) {
+      Log.e(TAG, e.getMessage(), e);
+    }
+    return new ArrayList<Album>();
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setThumbnailUrl(String url) {
-		this.thumbnailUrl = url;
-	}
+  public void setThumbnailUrl(String url) {
+    this.thumbnailUrl = url;
+  }
 
-	public String getThumbnailUrl() {
-		return thumbnailUrl;
-	}
+  public String getThumbnailUrl() {
+    return thumbnailUrl;
+  }
 
-	public void setGdataUrl(String url) {
-		this.gdataUrl = url;
-	}
+  public void setGdataUrl(String url) {
+    this.gdataUrl = url;
+  }
 
-	public String getGdataUrl() {
-		return gdataUrl;
-	}
+  public String getGdataUrl() {
+    return gdataUrl;
+  }
 
-	/**
-	 * Returns the serialized object.
-	 */
-	public byte[] convertToBytes() {
-		try {
-			ByteArrayOutputStream result = new ByteArrayOutputStream();
-			ObjectOutputStream output = new ObjectOutputStream(result);
-			output.writeObject(this);
-			return result.toByteArray();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+  /**
+   * Returns the serialized object.
+   */
+  public byte[] convertToBytes() {
+    try {
+      ByteArrayOutputStream result = new ByteArrayOutputStream();
+      ObjectOutputStream output = new ObjectOutputStream(result);
+      output.writeObject(this);
+      return result.toByteArray();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeByteArray(convertToBytes());
-	}
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeByteArray(convertToBytes());
+  }
 }

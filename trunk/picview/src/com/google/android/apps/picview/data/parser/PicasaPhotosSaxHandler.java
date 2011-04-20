@@ -25,57 +25,55 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.google.android.apps.picview.data.Photo;
 
-
 /**
  * A SAX handler for parsing Picasa Photos XML.
  * 
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public class PicasaPhotosSaxHandler extends DefaultHandler {
-	private List<Photo> albums = new ArrayList<Photo>();
-	private Photo currentPhoto;
-	private StringBuilder builder = new StringBuilder();
+  private List<Photo> albums = new ArrayList<Photo>();
+  private Photo currentPhoto;
+  private StringBuilder builder = new StringBuilder();
 
-	public List<Photo> getPhotos() {
-		return albums;
-	}
+  public List<Photo> getPhotos() {
+    return albums;
+  }
 
-	@Override
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
-		builder.append(ch, start, length);
-	}
+  @Override
+  public void characters(char[] ch, int start, int length) throws SAXException {
+    builder.append(ch, start, length);
+  }
 
-	@Override
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
-		if (localName.equals("entry")) {
-			albums.add(currentPhoto);
-		} else if (localName.equals("title")) {
-			if (currentPhoto != null) {
-				currentPhoto.setName(builder.toString());
-			}
-		}
-		builder.setLength(0);
-	}
+  @Override
+  public void endElement(String uri, String localName, String qName)
+      throws SAXException {
+    if (localName.equals("entry")) {
+      albums.add(currentPhoto);
+    } else if (localName.equals("title")) {
+      if (currentPhoto != null) {
+        currentPhoto.setName(builder.toString());
+      }
+    }
+    builder.setLength(0);
+  }
 
-	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
-		if (localName.equals("entry")) {
-			currentPhoto = new Photo();
-		} else {
-			if (currentPhoto != null) {
-				// We can do better by selecting the best size. Right now we
-				// always use the last one, which should be the best one.
-				if (localName.equals("thumbnail")) {
-					String thumbnail = attributes.getValue("", "url");
-					currentPhoto.setThumbnailUrl(thumbnail);
-				} else if (localName.equals("content")) {
-					String image = attributes.getValue("", "url");
-					currentPhoto.setImageUrl(image);
-				}
-			}
-		}
-	}
+  @Override
+  public void startElement(String uri, String localName, String qName,
+      Attributes attributes) throws SAXException {
+    if (localName.equals("entry")) {
+      currentPhoto = new Photo();
+    } else {
+      if (currentPhoto != null) {
+        // We can do better by selecting the best size. Right now we
+        // always use the last one, which should be the best one.
+        if (localName.equals("thumbnail")) {
+          String thumbnail = attributes.getValue("", "url");
+          currentPhoto.setThumbnailUrl(thumbnail);
+        } else if (localName.equals("content")) {
+          String image = attributes.getValue("", "url");
+          currentPhoto.setImageUrl(image);
+        }
+      }
+    }
+  }
 }

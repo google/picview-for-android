@@ -37,111 +37,109 @@ import com.google.android.apps.picview.data.FileSystemImageCache;
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public class CachedImageFetcher {
-	private static final String TAG = CachedImageFetcher.class.getSimpleName();
+  private static final String TAG = CachedImageFetcher.class.getSimpleName();
 
-	private HashMap<URL, SoftReference<Bitmap>> cache = new HashMap<URL, SoftReference<Bitmap>>();
+  private HashMap<URL, SoftReference<Bitmap>> cache = new HashMap<URL, SoftReference<Bitmap>>();
 
-	/** Used to synchronize access based on URLs. */
-	private HashMap<String, URL> urls = new HashMap<String, URL>();
+  /** Used to synchronize access based on URLs. */
+  private HashMap<String, URL> urls = new HashMap<String, URL>();
 
-	private FileSystemImageCache fileSystemCache;
+  private FileSystemImageCache fileSystemCache;
 
-	/**
-	 * Instantiated the {@link CachedImageFetcher}.
-	 * 
-	 * @param fileSystemCache
-	 *            the cache to use as a fallback, if the given value could not
-	 *            be found in memory
-	 */
-	public CachedImageFetcher(FileSystemImageCache fileSystemCache) {
-		this.fileSystemCache = fileSystemCache;
-	}
+  /**
+   * Instantiated the {@link CachedImageFetcher}.
+   * 
+   * @param fileSystemCache
+   *          the cache to use as a fallback, if the given value could not be
+   *          found in memory
+   */
+  public CachedImageFetcher(FileSystemImageCache fileSystemCache) {
+    this.fileSystemCache = fileSystemCache;
+  }
 
-	/**
-	 * Performs a cached fetch. If the image is in one of the caches
-	 * (file-system or in-memory), this version is returned. If the image could
-	 * not be found in cache, it's fetched and automatically put into both
-	 * caches.
-	 */
-	public Bitmap cachedFetchImage(URL url) {
-		// Make sure we have a URL object that we can synchronize on.
-		url = getSynchronizableInstance(url);
+  /**
+   * Performs a cached fetch. If the image is in one of the caches (file-system
+   * or in-memory), this version is returned. If the image could not be found in
+   * cache, it's fetched and automatically put into both caches.
+   */
+  public Bitmap cachedFetchImage(URL url) {
+    // Make sure we have a URL object that we can synchronize on.
+    url = getSynchronizableInstance(url);
 
-		// Synchronize per URL.
-		synchronized (url) {
-			// Get it from memory, if we still have it.
-			if (cache.containsKey(url) && cache.get(url).get() != null) {
-				return cache.get(url).get();
-			}
+    // Synchronize per URL.
+    synchronized (url) {
+      // Get it from memory, if we still have it.
+      if (cache.containsKey(url) && cache.get(url).get() != null) {
+        return cache.get(url).get();
+      }
 
-			// If it's not in memory, try to load it from file system.
-			Bitmap bitmap = fileSystemCache.get(url);
+      // If it's not in memory, try to load it from file system.
+      Bitmap bitmap = fileSystemCache.get(url);
 
-			// If it is also not found in the file system cache, try to fetch it
-			// from the network.
-			if (bitmap == null) {
-				bitmap = fetchImageFromWeb(url);
-				if (bitmap != null) {
-					fileSystemCache.asyncPut(url, "TODO", bitmap);
-				}
-			}
-			if (bitmap != null) {
-				cache.put(url, new SoftReference<Bitmap>(bitmap));
-			}
-			return bitmap;
-		}
-	}
+      // If it is also not found in the file system cache, try to fetch it
+      // from the network.
+      if (bitmap == null) {
+        bitmap = fetchImageFromWeb(url);
+        if (bitmap != null) {
+          fileSystemCache.asyncPut(url, "TODO", bitmap);
+        }
+      }
+      if (bitmap != null) {
+        cache.put(url, new SoftReference<Bitmap>(bitmap));
+      }
+      return bitmap;
+    }
+  }
 
-	/**
-	 * If the image with the given URL is not already in cache, it is fetched.
-	 * This can be used to pre-cache images that are likely to be requested
-	 * soon.
-	 */
-	public void maybePrefetchImageAsync(final URL url) {
-		if (isCached(url)) {
-			return;
-		}
-		(new AsyncTask<Void, Integer, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-				cachedFetchImage(url);
-				return null;
-			}
-		}).execute();
-	}
+  /**
+   * If the image with the given URL is not already in cache, it is fetched.
+   * This can be used to pre-cache images that are likely to be requested soon.
+   */
+  public void maybePrefetchImageAsync(final URL url) {
+    if (isCached(url)) {
+      return;
+    }
+    (new AsyncTask<Void, Integer, Void>() {
+      @Override
+      protected Void doInBackground(Void... params) {
+        cachedFetchImage(url);
+        return null;
+      }
+    }).execute();
+  }
 
-	/**
-	 * Returns whether the image with the given URL exists in cache.
-	 */
-	public boolean isCached(URL url) {
-		return cache.containsKey(url);
-	}
+  /**
+   * Returns whether the image with the given URL exists in cache.
+   */
+  public boolean isCached(URL url) {
+    return cache.containsKey(url);
+  }
 
-	private URL getSynchronizableInstance(URL url) {
-		if (urls.containsKey(url.toString())) {
-			url = urls.get(url.toString());
-		} else {
-			urls.put(url.toString(), url);
-		}
-		return url;
-	}
+  private URL getSynchronizableInstance(URL url) {
+    if (urls.containsKey(url.toString())) {
+      url = urls.get(url.toString());
+    } else {
+      urls.put(url.toString(), url);
+    }
+    return url;
+  }
 
-	/**
-	 * Fetches the given image from the web.
-	 */
-	private Bitmap fetchImageFromWeb(URL url) {
-		try {
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoInput(true);
-			conn.connect();
-			InputStream is = conn.getInputStream();
-			return BitmapFactory.decodeStream(is);
-		} catch (OutOfMemoryError ex) {
-			Log.e(TAG, "Out of memory, cannot create bitmap.");
-			System.gc();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+  /**
+   * Fetches the given image from the web.
+   */
+  private Bitmap fetchImageFromWeb(URL url) {
+    try {
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setDoInput(true);
+      conn.connect();
+      InputStream is = conn.getInputStream();
+      return BitmapFactory.decodeStream(is);
+    } catch (OutOfMemoryError ex) {
+      Log.e(TAG, "Out of memory, cannot create bitmap.");
+      System.gc();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }

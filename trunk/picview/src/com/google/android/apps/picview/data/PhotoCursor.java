@@ -26,27 +26,27 @@ import android.graphics.BitmapFactory;
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public class PhotoCursor {
-	private final Cursor cursor;
-	private final String columnBitmap;
+  private final Cursor cursor;
+  private final String columnBitmap;
 
-	public PhotoCursor(Cursor cursor, String columnBitmap) {
-		this.cursor = cursor;
-		this.columnBitmap = columnBitmap;
-	}
+  public PhotoCursor(Cursor cursor, String columnBitmap) {
+    this.cursor = cursor;
+    this.columnBitmap = columnBitmap;
+  }
 
-	public boolean moveToFirst() {
-		return cursor != null && cursor.moveToFirst();
-	}
+  public boolean moveToFirst() {
+    return cursor != null && cursor.moveToFirst();
+  }
 
-	public void close() {
-		if (cursor != null) {
-			cursor.close();
-		}
-	}
+  public void close() {
+    if (cursor != null) {
+      cursor.close();
+    }
+  }
 
-	public Bitmap getBitmapAndClose() {
-		byte[] data = cursor.getBlob(cursor.getColumnIndex(columnBitmap));
-		close();
-		return BitmapFactory.decodeByteArray(data, 0, data.length);
-	}
+  public Bitmap getBitmapAndClose() {
+    byte[] data = cursor.getBlob(cursor.getColumnIndex(columnBitmap));
+    close();
+    return BitmapFactory.decodeByteArray(data, 0, data.length);
+  }
 }

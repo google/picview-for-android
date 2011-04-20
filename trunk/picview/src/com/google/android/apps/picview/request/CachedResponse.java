@@ -23,18 +23,18 @@ package com.google.android.apps.picview.request;
  * @author haeberling@google.com (Sascha Haeberling)
  * 
  * @param <T>
- *            the actual content type
+ *          the actual content type
  */
 public class CachedResponse<T> {
-	public static final int NOT_CACHED = 0;
-	public static final int FROM_FILE = 1;
-	public static final int FROM_MEMORY = 2;
+  public static final int NOT_CACHED = 0;
+  public static final int FROM_FILE = 1;
+  public static final int FROM_MEMORY = 2;
 
-	public final int cacheStatus;
-	public final T content;
+  public final int cacheStatus;
+  public final T content;
 
-	public CachedResponse(int cacheStatus, T content) {
-		this.cacheStatus = cacheStatus;
-		this.content = content;
-	}
+  public CachedResponse(int cacheStatus, T content) {
+    this.cacheStatus = cacheStatus;
+    this.content = content;
+  }
 }

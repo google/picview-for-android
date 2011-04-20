@@ -32,10 +32,9 @@ import android.view.LayoutInflater;
  */
 public class AlbumsAdapter extends MultiColumnImageAdapter<Album> {
 
-	public AlbumsAdapter(List<ThumbnailItem<Album>> dataItems, LayoutInflater inflater,
-			ThumbnailClickListener<Album> listener,
-			CachedImageFetcher cachedImageFetcher, DisplayMetrics displayMetrics) {
-		super(dataItems, inflater, listener, cachedImageFetcher, displayMetrics);
-	}
-
+  public AlbumsAdapter(List<ThumbnailItem<Album>> dataItems,
+      LayoutInflater inflater, ThumbnailClickListener<Album> listener,
+      CachedImageFetcher cachedImageFetcher, DisplayMetrics displayMetrics) {
+    super(dataItems, inflater, listener, cachedImageFetcher, displayMetrics);
+  }
 }
