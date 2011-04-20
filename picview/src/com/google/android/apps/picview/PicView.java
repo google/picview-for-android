@@ -62,195 +62,191 @@ import de.haeberling.picview.R;
  */
 public class PicView extends Activity {
 
-	/** Used for storing files on the file system as a directory. */
-	public static final String appNamePath = "picview";
+  /** Used for storing files on the file system as a directory. */
+  public static final String appNamePath = "picview";
 
-	private static final String TAG = PicView.class.getSimpleName();
-	private static final int MENU_ADD = 0;
-	private static final int MENU_PREFERENCES = 1;
-	private static final int MENU_ABOUT = 2;
+  private static final String TAG = PicView.class.getSimpleName();
+  private static final int MENU_ADD = 0;
+  private static final int MENU_PREFERENCES = 1;
+  private static final int MENU_ABOUT = 2;
 
-	private static class SavedConfiguration {
-		public final List<Album> albums;
-		public final CachedImageFetcher cachedImageFetcher;
+  private static class SavedConfiguration {
+    public final List<Album> albums;
+    public final CachedImageFetcher cachedImageFetcher;
 
-		public SavedConfiguration(List<Album> albums,
-				CachedImageFetcher cachedImageFetcher) {
-			this.albums = albums;
-			this.cachedImageFetcher = cachedImageFetcher;
-		}
-	}
+    public SavedConfiguration(List<Album> albums,
+        CachedImageFetcher cachedImageFetcher) {
+      this.albums = albums;
+      this.cachedImageFetcher = cachedImageFetcher;
+    }
+  }
 
-	private ListView mainList;
-	private LayoutInflater inflater;
-	private List<Album> albums = new ArrayList<Album>();
-	private CachedImageFetcher cachedImageFetcher;
-	private CachedWebRequestFetcher cachedWebRequestFetcher;
+  private ListView mainList;
+  private LayoutInflater inflater;
+  private List<Album> albums = new ArrayList<Album>();
+  private CachedImageFetcher cachedImageFetcher;
+  private CachedWebRequestFetcher cachedWebRequestFetcher;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.album_list);
-		mainList = (ListView) findViewById(R.id.albumlist);
-		inflater = LayoutInflater.from(this);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    setContentView(R.layout.album_list);
+    mainList = (ListView) findViewById(R.id.albumlist);
+    inflater = LayoutInflater.from(this);
 
-		Button okButton = (Button) findViewById(R.id.topBarOkButton);
-		okButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				doAlbumsRequest();
-			}
-		});
+    Button okButton = (Button) findViewById(R.id.topBarOkButton);
+    okButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        doAlbumsRequest();
+      }
+    });
 
-		cachedImageFetcher = new CachedImageFetcher(new FileSystemImageCache());
-		cachedWebRequestFetcher = new CachedWebRequestFetcher(
-				new FileSystemWebResponseCache());
+    cachedImageFetcher = new CachedImageFetcher(new FileSystemImageCache());
+    cachedWebRequestFetcher = new CachedWebRequestFetcher(
+        new FileSystemWebResponseCache());
 
-		initCurrentConfiguration();
-		showAlbums();
-	}
+    initCurrentConfiguration();
+    showAlbums();
+  }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, MENU_ADD, 0, "Add").setIcon(android.R.drawable.ic_menu_add);
-		menu.add(0, MENU_PREFERENCES, 1, "Preferences").setIcon(
-				android.R.drawable.ic_menu_manage);
-		menu.add(0, MENU_ABOUT, 2, "About").setIcon(
-				android.R.drawable.ic_menu_info_details);
-		return true;
-	}
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    menu.add(0, MENU_ADD, 0, "Add").setIcon(android.R.drawable.ic_menu_add);
+    menu.add(0, MENU_PREFERENCES, 1, "Preferences").setIcon(
+        android.R.drawable.ic_menu_manage);
+    menu.add(0, MENU_ABOUT, 2, "About").setIcon(
+        android.R.drawable.ic_menu_info_details);
+    return true;
+  }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MENU_PREFERENCES:
-			Intent intent = new Intent(this, PicViewPreferencesActivity.class);
-			startActivity(intent);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+    case MENU_PREFERENCES:
+      Intent intent = new Intent(this, PicViewPreferencesActivity.class);
+      startActivity(intent);
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
 
-	private void initCurrentConfiguration() {
-		SavedConfiguration savedConfig = (SavedConfiguration) getLastNonConfigurationInstance();
+  private void initCurrentConfiguration() {
+    SavedConfiguration savedConfig = (SavedConfiguration) getLastNonConfigurationInstance();
 
-		if (savedConfig != null) {
-			albums = savedConfig.albums;
-			cachedImageFetcher = savedConfig.cachedImageFetcher;
-		}
-	}
+    if (savedConfig != null) {
+      albums = savedConfig.albums;
+      cachedImageFetcher = savedConfig.cachedImageFetcher;
+    }
+  }
 
-	private void doAlbumsRequest() {
-		// Use text field value.
-		EditText txtUserName = (EditText) findViewById(R.id.txtUsername);
-		PicasaAlbumsUrl url = new PicasaAlbumsUrl(txtUserName.getText()
-				.toString());
-		AsyncRequestTask request = new AsyncRequestTask(
-				cachedWebRequestFetcher, url.getUrl(), false,
-				"Loading albums...", this, new RequestCallback() {
-					@Override
-					public void success(String data) {
-						PicView.this.albums = Album.parseFromPicasaXml(data);
-						Log.d(TAG,
-								"Albums loaded: " + PicView.this.albums.size());
-						showAlbums();
-					}
+  private void doAlbumsRequest() {
+    // Use text field value.
+    EditText txtUserName = (EditText) findViewById(R.id.txtUsername);
+    PicasaAlbumsUrl url = new PicasaAlbumsUrl(txtUserName.getText().toString());
+    AsyncRequestTask request = new AsyncRequestTask(cachedWebRequestFetcher,
+        url.getUrl(), false, "Loading albums...", this, new RequestCallback() {
+          @Override
+          public void success(String data) {
+            PicView.this.albums = Album.parseFromPicasaXml(data);
+            Log.d(TAG, "Albums loaded: " + PicView.this.albums.size());
+            showAlbums();
+          }
 
-					@Override
-					public void error(String message) {
-						Log.e(TAG, "Could not load albums: " + message);
-						showError("Error while fetching albums");
-					}
-				});
-		request.execute();
-	}
+          @Override
+          public void error(String message) {
+            Log.e(TAG, "Could not load albums: " + message);
+            showError("Error while fetching albums");
+          }
+        });
+    request.execute();
+  }
 
-	private void doPhotosRequest(final String albumTitle, String gdataUrl) {
-		AsyncRequestTask request = new AsyncRequestTask(
-				cachedWebRequestFetcher, gdataUrl, false, "Loading photos...",
-				this, new RequestCallback() {
+  private void doPhotosRequest(final String albumTitle, String gdataUrl) {
+    AsyncRequestTask request = new AsyncRequestTask(cachedWebRequestFetcher,
+        gdataUrl, false, "Loading photos...", this, new RequestCallback() {
 
-					@Override
-					public void success(String data) {
-						showPhotos(albumTitle, Photo.parseFromPicasaXml(data));
-					}
+          @Override
+          public void success(String data) {
+            showPhotos(albumTitle, Photo.parseFromPicasaXml(data));
+          }
 
-					@Override
-					public void error(String message) {
-						Log.e(TAG, "Could not load photos: " + message);
-						showError("Error while fetching photos");
-					}
-				});
-		request.execute();
-	}
+          @Override
+          public void error(String message) {
+            Log.e(TAG, "Could not load photos: " + message);
+            showError("Error while fetching photos");
+          }
+        });
+    request.execute();
+  }
 
-	/**
-	 * Show a visual error message to the user.
-	 * 
-	 * @param message
-	 *            the message to show
-	 */
-	private void showError(String message) {
-		final Builder builder = new AlertDialog.Builder(PicView.this);
-		builder.setTitle(message);
-		builder.setIcon(android.R.drawable.ic_dialog_alert);
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-		builder.setMessage(message);
-		builder.show();
+  /**
+   * Show a visual error message to the user.
+   * 
+   * @param message
+   *          the message to show
+   */
+  private void showError(String message) {
+    final Builder builder = new AlertDialog.Builder(PicView.this);
+    builder.setTitle(message);
+    builder.setIcon(android.R.drawable.ic_dialog_alert);
+    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        dialog.dismiss();
+      }
+    });
+    builder.setMessage(message);
+    builder.show();
 
-	}
+  }
 
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-		return new SavedConfiguration(albums, cachedImageFetcher);
-	}
+  @Override
+  public Object onRetainNonConfigurationInstance() {
+    return new SavedConfiguration(albums, cachedImageFetcher);
+  }
 
-	private void showAlbums() {
-		if (albums == null) {
-			return;
-		}
+  private void showAlbums() {
+    if (albums == null) {
+      return;
+    }
 
-		ThumbnailClickListener<Album> foo = new ThumbnailClickListener<Album>() {
-			@Override
-			public void thumbnailClicked(Album album) {
-				doPhotosRequest(album.getName(), album.getGdataUrl());
-			}
-		};
-		mainList.setAdapter(new AlbumsAdapter(wrap(albums), inflater, foo,
-				cachedImageFetcher, getResources().getDisplayMetrics()));
-		BaseAdapter adapter = (BaseAdapter) mainList.getAdapter();
-		adapter.notifyDataSetChanged();
-		adapter.notifyDataSetInvalidated();
-		mainList.invalidateViews();
-	}
+    ThumbnailClickListener<Album> foo = new ThumbnailClickListener<Album>() {
+      @Override
+      public void thumbnailClicked(Album album) {
+        doPhotosRequest(album.getName(), album.getGdataUrl());
+      }
+    };
+    mainList.setAdapter(new AlbumsAdapter(wrap(albums), inflater, foo,
+        cachedImageFetcher, getResources().getDisplayMetrics()));
+    BaseAdapter adapter = (BaseAdapter) mainList.getAdapter();
+    adapter.notifyDataSetChanged();
+    adapter.notifyDataSetInvalidated();
+    mainList.invalidateViews();
+  }
 
-	private void showPhotos(String albumTitle, List<Photo> photos) {
-		Log.d(TAG, "SHOW PHOTOS()");
-		Intent intent = new Intent(this, PhotoListActivity.class);
-		intent.putParcelableArrayListExtra("photos", (ArrayList<Photo>) photos);
-		intent.putExtra("albumName", albumTitle);
-		startActivity(intent);
-	}
+  private void showPhotos(String albumTitle, List<Photo> photos) {
+    Log.d(TAG, "SHOW PHOTOS()");
+    Intent intent = new Intent(this, PhotoListActivity.class);
+    intent.putParcelableArrayListExtra("photos", (ArrayList<Photo>) photos);
+    intent.putExtra("albumName", albumTitle);
+    startActivity(intent);
+  }
 
-	/**
-	 * Wraps a list of {@link Album}s into a list of {@link ThumbnailItem}s, so
-	 * they can be displayed in the list.
-	 */
-	private static List<ThumbnailItem<Album>> wrap(List<Album> albums) {
-		List<ThumbnailItem<Album>> result = new ArrayList<ThumbnailItem<Album>>();
-		for (Album album : albums) {
-			result.add(new ThumbnailItem<Album>(album.getName(), album
-					.getThumbnailUrl(), album));
-		}
-		return result;
-	}
+  /**
+   * Wraps a list of {@link Album}s into a list of {@link ThumbnailItem}s, so
+   * they can be displayed in the list.
+   */
+  private static List<ThumbnailItem<Album>> wrap(List<Album> albums) {
+    List<ThumbnailItem<Album>> result = new ArrayList<ThumbnailItem<Album>>();
+    for (Album album : albums) {
+      result.add(new ThumbnailItem<Album>(album.getName(), album
+          .getThumbnailUrl(), album));
+    }
+    return result;
+  }
 }

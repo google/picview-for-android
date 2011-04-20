@@ -29,26 +29,26 @@ import android.widget.LinearLayout;
  */
 public class ThumbnailSlotView extends LinearLayout {
 
-	private ImageLoadingTask imageLoadingTask;
+  private ImageLoadingTask imageLoadingTask;
 
-	public ThumbnailSlotView(Context context, AttributeSet attributes) {
-		super(context, attributes);
-	}
+  public ThumbnailSlotView(Context context, AttributeSet attributes) {
+    super(context, attributes);
+  }
 
-	/**
-	 * Sets the {@link ImageLoadingTask} that is currently loading content for
-	 * this view.
-	 */
-	public void setImageLoadingTask(ImageLoadingTask task) {
-		imageLoadingTask = task;
-	}
+  /**
+   * Sets the {@link ImageLoadingTask} that is currently loading content for
+   * this view.
+   */
+  public void setImageLoadingTask(ImageLoadingTask task) {
+    imageLoadingTask = task;
+  }
 
-	/**
-	 * Gets the {@link ImageLoadingTask} that is currently loading content for
-	 * this view, or <code>null</code>.
-	 */
-	public ImageLoadingTask getImageLoadingTask() {
-		return imageLoadingTask;
-	}
+  /**
+   * Gets the {@link ImageLoadingTask} that is currently loading content for
+   * this view, or <code>null</code>.
+   */
+  public ImageLoadingTask getImageLoadingTask() {
+    return imageLoadingTask;
+  }
 
 }

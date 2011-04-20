@@ -30,36 +30,35 @@ import de.haeberling.picview.R;
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public class PicViewPreferencesActivity extends PreferenceActivity {
-	int oldCacheValue;
+  int oldCacheValue;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		addPreferencesFromResource(R.xml.preferences);
-	}
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    addPreferencesFromResource(R.xml.preferences);
+  }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		oldCacheValue = getCurrentCacheValue();
-	}
+  @Override
+  protected void onResume() {
+    super.onResume();
+    oldCacheValue = getCurrentCacheValue();
+  }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		int currentCacheValue = getCurrentCacheValue();
-		if (currentCacheValue != oldCacheValue) {
-			Toast.makeText(
-					this,
-					"Changing cache: " + (currentCacheValue - oldCacheValue)
-							+ " MB", Toast.LENGTH_SHORT).show();
-		}
-	}
+  @Override
+  protected void onPause() {
+    super.onPause();
+    int currentCacheValue = getCurrentCacheValue();
+    if (currentCacheValue != oldCacheValue) {
+      Toast.makeText(this,
+          "Changing cache: " + (currentCacheValue - oldCacheValue) + " MB",
+          Toast.LENGTH_SHORT).show();
+    }
+  }
 
-	private int getCurrentCacheValue() {
-		return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(
-				this).getString("cacheSize", "400"));
-	}
+  private int getCurrentCacheValue() {
+    return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
+        .getString("cacheSize", "400"));
+  }
 }
