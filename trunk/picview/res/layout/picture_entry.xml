@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<de.haeberling.picview.view.ThumbnailSlotView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.apps.picview.view.ThumbnailSlotView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="140dp"
     android:layout_height="wrap_content"
@@ -7,4 +7,4 @@
     >
 <ImageView android:id="@+id/album_thumbnail" android:textColor="#fff" android:layout_width="140dp" android:layout_height="140dp"></ImageView>
 <TextView android:text="" android:id="@+id/picture_title" android:textColor="#fff" android:layout_width="140dp" android:layout_height="wrap_content"></TextView>
-</de.haeberling.picview.view.ThumbnailSlotView>
+</com.google.android.apps.picview.view.ThumbnailSlotView>
