@@ -22,10 +22,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
+import android.util.Log;
+
 import com.google.android.apps.picview.data.FileSystemWebResponseCache;
 import com.google.android.apps.picview.data.WebResponseCursor.CachedWebResponse;
-
-import android.util.Log;
 
 /**
  * Uses the request database and runtime cache to lookup requests. If the

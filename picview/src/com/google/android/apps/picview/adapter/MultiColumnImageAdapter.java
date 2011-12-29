@@ -20,12 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import com.google.android.apps.picview.PicViewConfig;
-import com.google.android.apps.picview.request.CachedImageFetcher;
-import com.google.android.apps.picview.request.ImageLoadingTask;
-import com.google.android.apps.picview.ui.ThumbnailItem;
-import com.google.android.apps.picview.view.ThumbnailSlotView;
-
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -38,7 +32,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import de.haeberling.picview.R;
+
+import com.google.android.apps.picview.PicViewConfig;
+import com.google.android.apps.picview.R;
+import com.google.android.apps.picview.request.CachedImageFetcher;
+import com.google.android.apps.picview.request.ImageLoadingTask;
+import com.google.android.apps.picview.ui.ThumbnailItem;
+import com.google.android.apps.picview.view.ThumbnailSlotView;
 
 /**
  * This adapter renders thumbnails and their description in as many columns as

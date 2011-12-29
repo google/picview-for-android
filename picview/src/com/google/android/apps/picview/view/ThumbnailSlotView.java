@@ -16,11 +16,11 @@
 
 package com.google.android.apps.picview.view;
 
-import com.google.android.apps.picview.request.ImageLoadingTask;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+
+import com.google.android.apps.picview.request.ImageLoadingTask;
 
 /**
  * A view for showing a thumbnail in e.g. a list view.

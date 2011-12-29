@@ -22,7 +22,8 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.ImageView;
-import de.haeberling.picview.R;
+
+import com.google.android.apps.picview.R;
 
 /**
  * An asynchronous task that loads an image from the given URL.

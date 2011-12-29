@@ -19,13 +19,6 @@ package com.google.android.apps.picview.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.apps.picview.adapter.PhotosAdapter;
-import com.google.android.apps.picview.adapter.MultiColumnImageAdapter.ThumbnailClickListener;
-import com.google.android.apps.picview.data.FileSystemImageCache;
-import com.google.android.apps.picview.data.Photo;
-import com.google.android.apps.picview.request.CachedImageFetcher;
-import com.google.android.apps.picview.ui.ThumbnailItem;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +28,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import de.haeberling.picview.R;
+
+import com.google.android.apps.picview.R;
+import com.google.android.apps.picview.adapter.MultiColumnImageAdapter.ThumbnailClickListener;
+import com.google.android.apps.picview.adapter.PhotosAdapter;
+import com.google.android.apps.picview.data.FileSystemImageCache;
+import com.google.android.apps.picview.data.Photo;
+import com.google.android.apps.picview.request.CachedImageFetcher;
+import com.google.android.apps.picview.ui.ThumbnailItem;
 
 /**
  * An activity that shows a list of photos.

@@ -21,7 +21,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 import android.widget.Toast;
-import de.haeberling.picview.R;
+
+import com.google.android.apps.picview.R;
 
 /**
  * The preferences activity shows common preferences that can be configured by

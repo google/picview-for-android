@@ -20,14 +20,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
 
-import com.google.android.apps.picview.PicView;
-
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
+
+import com.google.android.apps.picview.PicView;
 
 /**
  * A data base that stores image data.
