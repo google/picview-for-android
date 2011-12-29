@@ -64,7 +64,6 @@ public class Photo implements Serializable, Parcelable {
     }
   };
 
-  private static final String SIZE_800 = "s800";
   private String name;
   private String thumbnailUrl;
   private String imageUrl;
@@ -127,9 +126,10 @@ public class Photo implements Serializable, Parcelable {
    * TODO(haeberling): This is Picasa specific, this should be made more
    * general.
    */
-  public String getMediumImageUrl() {
+  public String getMediumImageUrl(int photoSizeLongSide) {
     int pos = imageUrl.lastIndexOf('/');
-    return imageUrl.substring(0, pos + 1) + SIZE_800 + imageUrl.substring(pos);
+    return imageUrl.substring(0, pos + 1) + 's' + photoSizeLongSide
+        + imageUrl.substring(pos);
   }
 
   /**
