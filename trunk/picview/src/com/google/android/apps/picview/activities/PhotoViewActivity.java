@@ -23,6 +23,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -68,6 +69,7 @@ public class PhotoViewActivity extends Activity {
   private List<Photo> photos;
   private String albumName = "";
   private CachedImageFetcher cachedImageFetcher;
+  private int photoSizeLongSide = -1;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -137,15 +139,24 @@ public class PhotoViewActivity extends Activity {
   }
 
   private void showPhoto() {
+    if (photoSizeLongSide < 0) {
+      // Determines the size for the photo shown full-screen (without zooming).
+      DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+      photoSizeLongSide = Math.max(displayMetrics.heightPixels,
+          displayMetrics.widthPixels);
+    }
+
     try {
       ProgressDialog progressDialog = new ProgressDialog(this);
       progressDialog.setMessage("Loading photo");
-      ImageLoadingTask imageLoadingTask = new ImageLoadingTask(photoView,
-          new URL(photos.get(currentIndex).getMediumImageUrl()),
+      ImageLoadingTask imageLoadingTask = new ImageLoadingTask(
+          photoView,
+          new URL(photos.get(currentIndex).getMediumImageUrl(photoSizeLongSide)),
           cachedImageFetcher, progressDialog);
       imageLoadingTask.execute();
     } catch (MalformedURLException e) {
       e.printStackTrace();
+      return;
     }
 
     txtPhotoTitle.setText(photos.get(currentIndex).getName());
@@ -156,10 +167,11 @@ public class PhotoViewActivity extends Activity {
         Photo photo = photos.get(currentIndex + 1);
         if (photo != null) {
           cachedImageFetcher.maybePrefetchImageAsync(new URL(photo
-              .getMediumImageUrl()));
+              .getMediumImageUrl(photoSizeLongSide)));
         }
       } catch (MalformedURLException e) {
         e.printStackTrace();
+        return;
       }
     }
   }
