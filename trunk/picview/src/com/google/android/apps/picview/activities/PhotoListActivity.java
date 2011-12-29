@@ -84,7 +84,6 @@ public class PhotoListActivity extends Activity {
       Log.d(TAG, "No photos!");
       return;
     }
-    Log.d(TAG, "URL: " + photos.get(0).getMediumImageUrl());
 
     ThumbnailClickListener<Photo> clickListener = new ThumbnailClickListener<Photo>() {
       @Override
