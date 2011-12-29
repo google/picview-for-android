@@ -18,10 +18,10 @@ package com.google.android.apps.picview.data;
 
 import java.net.URL;
 
-import com.google.android.apps.picview.data.WebResponseCursor.CachedWebResponse;
-
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.google.android.apps.picview.data.WebResponseCursor.CachedWebResponse;
 
 /**
  * A cache that stores web responses on the device storage. It uses a

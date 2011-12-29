@@ -28,12 +28,12 @@ import java.util.List;
 
 import org.xml.sax.SAXException;
 
-import com.google.android.apps.picview.data.parser.PicasaAlbumsSaxHandler;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import android.util.Xml;
+
+import com.google.android.apps.picview.data.parser.PicasaAlbumsSaxHandler;
 
 /**
  * The Album data object containing all information about an album.

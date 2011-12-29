@@ -19,13 +19,13 @@ package com.google.android.apps.picview.data;
 import java.io.File;
 import java.net.URL;
 
-import com.google.android.apps.picview.PicView;
-
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
 import android.util.Log;
+
+import com.google.android.apps.picview.PicView;
 
 /**
  * A data base that stores responses from HTTP requests, along with their last

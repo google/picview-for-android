@@ -18,12 +18,12 @@ package com.google.android.apps.picview.adapter;
 
 import java.util.List;
 
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+
 import com.google.android.apps.picview.data.Photo;
 import com.google.android.apps.picview.request.CachedImageFetcher;
 import com.google.android.apps.picview.ui.ThumbnailItem;
-
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 
 /**
  * The controller for the photos list.

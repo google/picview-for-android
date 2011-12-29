@@ -19,21 +19,6 @@ package com.google.android.apps.picview;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.apps.picview.activities.PhotoListActivity;
-import com.google.android.apps.picview.activities.PicViewPreferencesActivity;
-import com.google.android.apps.picview.adapter.AlbumsAdapter;
-import com.google.android.apps.picview.adapter.MultiColumnImageAdapter.ThumbnailClickListener;
-import com.google.android.apps.picview.data.Album;
-import com.google.android.apps.picview.data.FileSystemImageCache;
-import com.google.android.apps.picview.data.FileSystemWebResponseCache;
-import com.google.android.apps.picview.data.Photo;
-import com.google.android.apps.picview.request.AsyncRequestTask;
-import com.google.android.apps.picview.request.CachedImageFetcher;
-import com.google.android.apps.picview.request.CachedWebRequestFetcher;
-import com.google.android.apps.picview.request.PicasaAlbumsUrl;
-import com.google.android.apps.picview.request.AsyncRequestTask.RequestCallback;
-import com.google.android.apps.picview.ui.ThumbnailItem;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -52,7 +37,21 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import de.haeberling.picview.R;
+
+import com.google.android.apps.picview.activities.PhotoListActivity;
+import com.google.android.apps.picview.activities.PicViewPreferencesActivity;
+import com.google.android.apps.picview.adapter.AlbumsAdapter;
+import com.google.android.apps.picview.adapter.MultiColumnImageAdapter.ThumbnailClickListener;
+import com.google.android.apps.picview.data.Album;
+import com.google.android.apps.picview.data.FileSystemImageCache;
+import com.google.android.apps.picview.data.FileSystemWebResponseCache;
+import com.google.android.apps.picview.data.Photo;
+import com.google.android.apps.picview.request.AsyncRequestTask;
+import com.google.android.apps.picview.request.AsyncRequestTask.RequestCallback;
+import com.google.android.apps.picview.request.CachedImageFetcher;
+import com.google.android.apps.picview.request.CachedWebRequestFetcher;
+import com.google.android.apps.picview.request.PicasaAlbumsUrl;
+import com.google.android.apps.picview.ui.ThumbnailItem;
 
 /**
  * The main activity, allowing the user to enter a Picasa username for which

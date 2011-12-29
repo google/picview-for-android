@@ -20,21 +20,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import com.google.android.apps.picview.data.FileSystemImageCache;
-import com.google.android.apps.picview.data.Photo;
-import com.google.android.apps.picview.request.CachedImageFetcher;
-import com.google.android.apps.picview.request.ImageLoadingTask;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import de.haeberling.picview.R;
+
+import com.google.android.apps.picview.R;
+import com.google.android.apps.picview.data.FileSystemImageCache;
+import com.google.android.apps.picview.data.Photo;
+import com.google.android.apps.picview.request.CachedImageFetcher;
+import com.google.android.apps.picview.request.ImageLoadingTask;
 
 /**
  * An activity that shows a single photo.
