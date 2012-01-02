@@ -17,6 +17,7 @@
 package com.google.android.apps.picview.data;
 
 import android.database.Cursor;
+import android.util.Log;
 
 /**
  * Keeps a cursor that is used in the web response database.
@@ -38,6 +39,7 @@ public class WebResponseCursor {
     }
   }
 
+  private static final String TAG = WebResponseCursor.class.getSimpleName();
   private final Cursor cursor;
   private final String columnModified;
   private final String columnResponse;
@@ -60,9 +62,21 @@ public class WebResponseCursor {
   }
 
   public CachedWebResponse getResponseAndClose() {
-    String modified = cursor.getString(cursor.getColumnIndex(columnModified));
-    String response = cursor.getString(cursor.getColumnIndex(columnResponse));
-    close();
-    return new CachedWebResponse(modified, response);
+    if (cursor.getCount() <= 0) {
+      Log.w(TAG, "Could not find web response in database.");
+      return null;
+    }
+    try {
+      String modified = cursor.getString(cursor.getColumnIndex(columnModified));
+      String response = cursor.getString(cursor.getColumnIndex(columnResponse));
+      return new CachedWebResponse(modified, response);
+    } catch (IllegalStateException ex) {
+      // TODO(haeberling): This sometimes happens, e.g. with Tray's portfolio,
+      // when the reply is really big.
+      ex.printStackTrace();
+    } finally {
+      cursor.close();
+    }
+    return null;
   }
 }

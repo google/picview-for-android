@@ -38,12 +38,13 @@ import com.google.android.apps.picview.request.CachedImageFetcher;
 import com.google.android.apps.picview.ui.ThumbnailItem;
 
 /**
- * An activity that shows a list of photos.
+ * An activity that shows a list of photos. It is used for the album list as
+ * well as the list of photos within an album.
  * 
  * @author haeberling@google.com (Sascha Haeberling)
  */
 public class PhotoListActivity extends Activity {
-  private static final String TAG = "PhotoListActivity";
+  private static final String TAG = PhotoListActivity.class.getSimpleName();
   private ListView mainList;
   private LayoutInflater inflater;
 
@@ -57,7 +58,8 @@ public class PhotoListActivity extends Activity {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    setContentView(R.layout.photo_list);
+    int viewId = getIntent().getIntExtra("layout", -1);
+    setContentView(viewId);
     mainList = (ListView) findViewById(R.id.photolist);
     inflater = LayoutInflater.from(this);
     albumName = getIntent().getExtras().getString("albumName");

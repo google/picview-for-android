@@ -124,6 +124,7 @@ public class CachedWebRequestFetcher {
     Log.d(TAG, "Fetching from web: " + url.toString());
     try {
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setUseCaches(false);
       conn.setReadTimeout(30000); // 30 seconds.
       conn.setDoInput(true);
       conn.connect();

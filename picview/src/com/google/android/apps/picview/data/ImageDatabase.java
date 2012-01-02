@@ -17,25 +17,18 @@
 package com.google.android.apps.picview.data;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.net.URL;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
-import android.os.Environment;
-import android.util.Log;
-
-import com.google.android.apps.picview.PicView;
 
 /**
  * A data base that stores image data.
  * 
  * @author haeberling@google.com (Sascha Haeberling)
  */
-public class ImageDatabase {
-  private static final String TAG = ImageDatabase.class.getSimpleName();
+public class ImageDatabase extends AbstractPicViewDatabase {
   private static final String DATABASE_NAME = "photos_cache.db";
   private static final String TABLE_NAME = "photos";
 
@@ -58,7 +51,10 @@ public class ImageDatabase {
    */
   public static ImageDatabase get() {
     if (imageDb == null) {
-      imageDb = new ImageDatabase(getUsableDataBase());
+      imageDb = new ImageDatabase(getUsableDataBase(DATABASE_NAME,
+          "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_URL
+              + " TEXT PRIMARY KEY," + COLUMN_MODIFIED + " TEXT,"
+              + COLUMN_BITMAP + " BLOB);"));
     }
     return imageDb;
   }
@@ -80,7 +76,7 @@ public class ImageDatabase {
    *          The version key of the image.
    * @param image
    *          The image to store.
-   * @return The row
+   * @return The row.
    */
   public long put(URL url, String modified, Bitmap image) {
     ContentValues values = new ContentValues();
@@ -113,40 +109,6 @@ public class ImageDatabase {
    */
   public boolean isReady() {
     return db != null;
-  }
-
-  private static SQLiteDatabase getUsableDataBase() {
-    File dbFile = getPathToDb();
-
-    File fileDirectory = new File(dbFile.getParent());
-    if (!fileDirectory.exists()) {
-      // Make sure the path for the file exists, before creating the
-      // database.
-      fileDirectory.mkdirs();
-    }
-    Log.d(TAG, "DB Path: " + dbFile.getAbsolutePath());
-    boolean initDb = !dbFile.exists();
-    try {
-      SQLiteDatabase result = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
-
-      if (initDb) {
-        result.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_URL
-            + " TEXT PRIMARY KEY," + COLUMN_MODIFIED + " TEXT," + COLUMN_BITMAP
-            + " BLOB);");
-      }
-
-      return result;
-    } catch (SQLiteException ex) {
-      Log.w(TAG, "Could not open or image database.");
-      return null;
-    }
-  }
-
-  private static File getPathToDb() {
-    String sdCardPath = Environment.getExternalStorageDirectory()
-        .getAbsolutePath();
-    return new File(sdCardPath + File.separator + "data" + File.separator
-        + PicView.appNamePath + File.separator + DATABASE_NAME);
   }
 
 }
