@@ -16,25 +16,18 @@
 
 package com.google.android.apps.picview.data;
 
-import java.io.File;
 import java.net.URL;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.os.Environment;
-import android.util.Log;
-
-import com.google.android.apps.picview.PicView;
 
 /**
- * A data base that stores responses from HTTP requests, along with their last
+ * A database that stores responses from HTTP requests, along with their last
  * modified date.
  * 
  * @author haeberling@google.com (Sascha Haeberling)
  */
-public class WebResponseDatabase {
-  private static final String TAG = WebResponseDatabase.class.getSimpleName();
+public class WebResponseDatabase extends AbstractPicViewDatabase {
   private static final String DATABASE_NAME = "request_cache.db";
   private static final String TABLE_NAME = "requests";
 
@@ -57,7 +50,10 @@ public class WebResponseDatabase {
    */
   public static WebResponseDatabase get() {
     if (responseDb == null) {
-      responseDb = new WebResponseDatabase(getUsableDataBase());
+      responseDb = new WebResponseDatabase(getUsableDataBase(DATABASE_NAME,
+          "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_URL
+              + " TEXT PRIMARY KEY," + COLUMN_MODIFIED + " TEXT,"
+              + COLUMN_RESPONSE + " TEXT);"));
     }
     return responseDb;
   }
@@ -107,40 +103,4 @@ public class WebResponseDatabase {
   public boolean isReady() {
     return db != null;
   }
-
-  private static SQLiteDatabase getUsableDataBase() {
-    File dbFile = getPathToDb();
-
-    File fileDirectory = new File(dbFile.getParent());
-    if (!fileDirectory.exists()) {
-      // Make sure the path for the file exists, before creating the
-      // database.
-      fileDirectory.mkdirs();
-    }
-    Log.d(TAG, "DB Path: " + dbFile.getAbsolutePath());
-    boolean initDb = !dbFile.exists();
-
-    try {
-      SQLiteDatabase result = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
-
-      if (initDb) {
-        result.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_URL
-            + " TEXT PRIMARY KEY," + COLUMN_MODIFIED + " TEXT,"
-            + COLUMN_RESPONSE + " TEXT);");
-      }
-
-      return result;
-    } catch (SQLiteException ex) {
-      Log.w(TAG, "Could not open or create web response database.");
-      return null;
-    }
-  }
-
-  private static File getPathToDb() {
-    String sdCardPath = Environment.getExternalStorageDirectory()
-        .getAbsolutePath();
-    return new File(sdCardPath + File.separator + "data" + File.separator
-        + PicView.appNamePath + File.separator + DATABASE_NAME);
-  }
-
 }

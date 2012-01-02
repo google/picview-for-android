@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.apps.picview;
+package com.google.android.apps.picview.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +27,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.android.apps.picview.activities.PhotoListActivity;
-import com.google.android.apps.picview.activities.PicViewPreferencesActivity;
+import com.google.android.apps.picview.R;
 import com.google.android.apps.picview.adapter.AlbumsAdapter;
 import com.google.android.apps.picview.adapter.MultiColumnImageAdapter.ThumbnailClickListener;
 import com.google.android.apps.picview.data.Album;
@@ -54,20 +46,15 @@ import com.google.android.apps.picview.request.PicasaAlbumsUrl;
 import com.google.android.apps.picview.ui.ThumbnailItem;
 
 /**
- * The main activity, allowing the user to enter a Picasa username for which
- * this activity shows all the available albums.
+ * Allows the user to enter a Picasa username for which this activity shows all
+ * the available albums.
+ * 
+ * TODO(haeberling): Try to merge this with the {@link PhotoListActivity}.
  * 
  * @author haeberling@google.com (Sascha Haeberling)
  */
-public class PicView extends Activity {
-
-  /** Used for storing files on the file system as a directory. */
-  public static final String appNamePath = "picview";
-
-  private static final String TAG = PicView.class.getSimpleName();
-  private static final int MENU_ADD = 0;
-  private static final int MENU_PREFERENCES = 1;
-  private static final int MENU_ABOUT = 2;
+public class AlbumListActivity extends Activity {
+  private static final String TAG = AlbumListActivity.class.getSimpleName();
 
   private static class SavedConfiguration {
     public final List<Album> albums;
@@ -89,49 +76,26 @@ public class PicView extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
     setContentView(R.layout.album_list);
     mainList = (ListView) findViewById(R.id.albumlist);
     inflater = LayoutInflater.from(this);
-
-    Button okButton = (Button) findViewById(R.id.topBarOkButton);
-    okButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        doAlbumsRequest();
-      }
-    });
 
     cachedImageFetcher = new CachedImageFetcher(new FileSystemImageCache());
     cachedWebRequestFetcher = new CachedWebRequestFetcher(
         new FileSystemWebResponseCache());
 
     initCurrentConfiguration();
-    showAlbums();
-  }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    menu.add(0, MENU_ADD, 0, "Add").setIcon(android.R.drawable.ic_menu_add);
-    menu.add(0, MENU_PREFERENCES, 1, "Preferences").setIcon(
-        android.R.drawable.ic_menu_manage);
-    menu.add(0, MENU_ABOUT, 2, "About").setIcon(
-        android.R.drawable.ic_menu_info_details);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-    case MENU_PREFERENCES:
-      Intent intent = new Intent(this, PicViewPreferencesActivity.class);
-      startActivity(intent);
-      return true;
+    // TODO: This is picasa specific.
+    final String accountId = getIntent().getExtras().getString("accountId");
+    if (accountId != null) {
+      doAlbumsRequest(accountId);
+    } else {
+      showAlbums();
     }
-    return super.onOptionsItemSelected(item);
   }
 
   private void initCurrentConfiguration() {
@@ -143,16 +107,21 @@ public class PicView extends Activity {
     }
   }
 
-  private void doAlbumsRequest() {
+  /**
+   * Loads the albums for the given user.
+   * 
+   * TODO: This is Picasa specific.
+   */
+  private void doAlbumsRequest(String userName) {
     // Use text field value.
-    EditText txtUserName = (EditText) findViewById(R.id.txtUsername);
-    PicasaAlbumsUrl url = new PicasaAlbumsUrl(txtUserName.getText().toString());
+    PicasaAlbumsUrl url = new PicasaAlbumsUrl(userName);
     AsyncRequestTask request = new AsyncRequestTask(cachedWebRequestFetcher,
-        url.getUrl(), false, "Loading albums...", this, new RequestCallback() {
+        url.getUrl(), false, "Loading albums...", this,
+        new RequestCallback() {
           @Override
           public void success(String data) {
-            PicView.this.albums = Album.parseFromPicasaXml(data);
-            Log.d(TAG, "Albums loaded: " + PicView.this.albums.size());
+            AlbumListActivity.this.albums = Album.parseFromPicasaXml(data);
+            Log.d(TAG, "Albums loaded: " + AlbumListActivity.this.albums.size());
             showAlbums();
           }
 
@@ -167,7 +136,8 @@ public class PicView extends Activity {
 
   private void doPhotosRequest(final String albumTitle, String gdataUrl) {
     AsyncRequestTask request = new AsyncRequestTask(cachedWebRequestFetcher,
-        gdataUrl, false, "Loading photos...", this, new RequestCallback() {
+        gdataUrl, false, "Loading photos...", this,
+        new RequestCallback() {
 
           @Override
           public void success(String data) {
@@ -190,7 +160,7 @@ public class PicView extends Activity {
    *          the message to show
    */
   private void showError(String message) {
-    final Builder builder = new AlertDialog.Builder(PicView.this);
+    final Builder builder = new AlertDialog.Builder(AlbumListActivity.this);
     builder.setTitle(message);
     builder.setIcon(android.R.drawable.ic_dialog_alert);
     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -233,6 +203,7 @@ public class PicView extends Activity {
     Intent intent = new Intent(this, PhotoListActivity.class);
     intent.putParcelableArrayListExtra("photos", (ArrayList<Photo>) photos);
     intent.putExtra("albumName", albumTitle);
+    intent.putExtra("layout", R.layout.photo_list);
     startActivity(intent);
   }
 

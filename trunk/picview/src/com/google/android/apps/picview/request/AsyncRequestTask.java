@@ -16,7 +16,6 @@
 
 package com.google.android.apps.picview.request;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.app.ProgressDialog;
@@ -44,9 +43,8 @@ public class AsyncRequestTask extends AsyncTask<Void, Integer, String> {
   private final String url;
   private final RequestCallback callback;
   private final boolean forceFetchFromWeb;
-  private final String loadingMessage;
   private final Context context;
-  private ProgressDialog progressDialog;
+  private ProgressDialog progressDialog = null;
   private String errorMessage;
   private boolean wasTakenFromDisk = false;
 
@@ -56,15 +54,19 @@ public class AsyncRequestTask extends AsyncTask<Void, Integer, String> {
     this.fetcher = fetcher;
     this.url = url;
     this.forceFetchFromWeb = forceFetchFromWeb;
-    this.loadingMessage = loadingMessage;
     this.context = context;
     this.callback = callback;
+
+    if (loadingMessage != null) {
+      this.progressDialog = new ProgressDialog(context);
+      this.progressDialog.setMessage(loadingMessage);
+    }
   }
 
   @Override
   protected void onPreExecute() {
-    if (loadingMessage != null) {
-      progressDialog = ProgressDialog.show(context, "", loadingMessage);
+    if (progressDialog != null) {
+      progressDialog.show();
     }
   }
 
@@ -75,7 +77,7 @@ public class AsyncRequestTask extends AsyncTask<Void, Integer, String> {
           forceFetchFromWeb);
       wasTakenFromDisk = (cachedResponse.cacheStatus == CachedResponse.FROM_FILE);
       return cachedResponse.content;
-    } catch (MalformedURLException e) {
+    } catch (Exception e) {
       e.printStackTrace();
       errorMessage = e.getMessage();
     }
@@ -84,7 +86,7 @@ public class AsyncRequestTask extends AsyncTask<Void, Integer, String> {
 
   @Override
   protected void onPostExecute(String result) {
-    if (progressDialog != null) {
+    if (progressDialog != null && progressDialog.isShowing()) {
       progressDialog.dismiss();
     }
 
@@ -95,7 +97,7 @@ public class AsyncRequestTask extends AsyncTask<Void, Integer, String> {
       // whether there is a newer version. If this is the case, the
       // callback will be called a second time with the updated result.
       if (wasTakenFromDisk) {
-        checkForNewerVersionAsync(result);
+         checkForNewerVersionAsync(result);
       }
     } else {
       callback.error(errorMessage);

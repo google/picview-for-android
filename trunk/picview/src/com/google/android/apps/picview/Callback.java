@@ -17,18 +17,13 @@
 package com.google.android.apps.picview;
 
 /**
- * Some global configuration parameters.
+ * A simple callback.
  * 
  * @author haeberling@google.com (Sascha Haeberling)
+ * 
+ * @param <T>
+ *          The type of the return value.
  */
-public class PicViewConfig {
-
-  /** The size of the album thumbnails (in dp). */
-  public static int ALBUM_THUMBNAIL_SIZE = 140;
-
-  /** Used for storing files on the file system as a directory. */
-  public static final String APP_NAME_PATH = "picview";
-
-  private PicViewConfig() {
-  }
+public interface Callback<T> {
+  public void callback(T value);
 }

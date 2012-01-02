@@ -1,4 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  General strings -->
     <string name="app_name">PicView</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
+    <!-- Accounts List -->
+    <string name="accounts_you_follow">Accounts you follow:</string>
+    <string name="add_account">Add account</string>
+    <string name="preferences">Preferences</string>
+    <string name="about">About</string>
+
+    <!--  Add/Edit Accounts Dialog -->
+    <string name="account_add_title">Add account</string>
+    <string name="account_type">Type:</string>
+    <string name="account_id">ID:</string>
+    <string name="account_name">Name:</string>
+    <string name="choose_account_type">Choose account type</string>
+    <string-array name="account_type_array">
+        <item>Picasa</item>
+        <item>(Fickr)</item>
+        <item>(SmugMug)</item>
+        <item>(500px)</item>
+    </string-array>
+
+    <string-array name="account_actions">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+    
+    <string name="are_you_sure_delete">Are you sure you want to delete this account?</string>
+
+    <!-- Content description strings. -->
+    <string name="account_type_logo">Logo for account type</string>
 </resources>

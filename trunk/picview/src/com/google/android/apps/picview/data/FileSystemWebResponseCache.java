@@ -62,7 +62,7 @@ public class FileSystemWebResponseCache {
       return null;
     }
 
-    Log.i(TAG, "Reading web response from database");
+    Log.i(TAG, "Trying to read web response from database");
     return c.getResponseAndClose();
   }
 
